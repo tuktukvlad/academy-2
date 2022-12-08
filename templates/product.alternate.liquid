@@ -1,0 +1,5 @@
+{% layout 'theme.alternate' %}
+
+<h1>{{ product.title }}</h1>
+
+{{ product.featured_image | image_url: width: 400 | image_tag }}
