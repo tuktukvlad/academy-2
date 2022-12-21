@@ -1,19 +1,43 @@
 <!doctype html>
-<html lang="{{ request.locale.iso_code }}">
-  <head>
-    <script src="{{ 'cart.js' | asset_url }}"></script>
+<html lang="en">
+<head>
+    <title>Title</title>
     {{ content_for_header }}
+</head>
+
+{%- style -%}
+    :root {
+    --layout-background: {{ settings.background | default: '#ffffff' }};
+    }
+{%- endstyle -%}
+
+<script>
+    window.VARS = {
+        background_color: '{{ settings.colors_accent_1 }}',
+        root_url: {{ routes.root_url | json }},
+        product_id: {{ product.title | json }},
+        product: {{ product | json }},
+        inventory_quantity: {{ product.selected_or_first_available_variant.inventory_quantity | json }}
+    };
+
+    {%- for variant in product.variants -%}
+    window.VARS.product.variants[{{- forloop.index0 -}}].inventory_quantity = {{ variant.inventory_quantity | json }};
+    {%- endfor -%}
+</script>
 
 
-  </head>
+<script src="https://unpkg.com/@shopify/theme-sections@4.1.1/dist/theme-sections.min.js" defer></script>
 
-  <body>
-// Header
-    // Breadcrumbs
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        Shopify.theme.sections.load('*')
+    })
+</script>
 
-    
-      {{ content_for_layout }}
 
-    // Footer
-  </body>
+<body style="background-color: var(--layout-background)">
+
+{{ content_for_layout }}
+
+</body>
 </html>

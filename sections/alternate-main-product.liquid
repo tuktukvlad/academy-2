@@ -1,0 +1,72 @@
+
+{%- style -%}
+  {{ section.id | prepend: '#shopify-section-' }} {
+      --section-background: {{ section.settings.background | default: '#ffffff' }};
+  }
+{%- endstyle -%}
+
+<script src="{{ 'alternate-main-product.js' | asset_url }}" type="module"></script>
+
+<div
+        data-section-id="{{- section.id -}}"
+        data-section-type="alternate-main-product"
+        data-limit=" {{- section.settings.limit -}}"
+        style="background-color: var(--section-background)"
+>
+
+    <h2>{{ product.title }}</h2>
+
+    <ul>
+      {%- for block in section.blocks  -%}
+        <li id="{{ block.id }}" {{- block.shopify_attributes -}}>
+            {{ block.settings.test }}
+        </li>
+      {%- endfor -%}
+    </ul>
+
+
+    <custom-element>
+      <h3>Custom Element</h3>
+    </custom-element>
+
+</div>
+{% schema %}
+{
+  "name": "Alternate Product",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Limit",
+      "step": 1,
+      "min": 1,
+      "max": 100,
+      "default": 10
+    }
+  ],
+  "blocks": [
+    {
+      "type": "block",
+      "name": "Block",
+      "settings": [
+        {
+          "type": "text",
+          "id": "test",
+          "label": "Test"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Alternate Product",
+      "settings": {}
+    }
+  ]
+}
+{% endschema %}

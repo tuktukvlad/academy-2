@@ -1,0 +1,12 @@
+{
+  "layout": "theme.alternate",
+  "sections": {
+    "main": {
+      "type": "alternate-main-product",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
