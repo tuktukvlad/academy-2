@@ -1,0 +1,26 @@
+
+<div
+        data-section-id="{{- section.id -}}"
+        data-section-type="alternate-header"
+>
+
+    <h1>Header</h1>
+
+  <a href="{{ routes.cart_url }}">
+    Cart (<span id="counter">{{ cart.item_count }}</span>)
+  </a>
+
+
+</div>
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background"
+    }
+  ]
+}
+{% endschema %}
