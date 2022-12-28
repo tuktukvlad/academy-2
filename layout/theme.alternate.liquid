@@ -26,13 +26,8 @@
 </script>
 
 
-<script src="https://unpkg.com/@shopify/theme-sections@4.1.1/dist/theme-sections.min.js" defer></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        Shopify.theme.sections.load('*')
-    })
-</script>
+<link rel="stylesheet" href="{{ 'theme.min.css' | asset_url }}">
+<script src="{{ 'theme.min.js' | asset_url }}" defer></script>
 
 
 <body style="background-color: var(--layout-background)">
