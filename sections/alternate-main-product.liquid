@@ -1,0 +1,175 @@
+{%- style -%}
+    {{ section.id | prepend: '#shopify-section-' }} {
+    --section-background: {{ section.settings.background | default: '#ffffff' }};
+    }
+{%- endstyle -%}
+
+{% comment %}
+{{ 'option_selection.js' | shopify_asset_url | script_tag }}
+{% endcomment %}
+
+<div
+        data-section-id="{{- section.id -}}"
+        data-section-type="alternate-main-product"
+        data-limit=" {{- section.settings.limit -}}"
+        style="background-color: var(--section-background)"
+        data-product="{{- product | json | escape -}}"
+        data-handle="{{- product.handle -}}"
+>
+
+
+    <h2>{{ product.title }}</h2>
+
+    <script>
+        window.variants_inventory = {};
+        {%- for variant in product.variants -%}
+        window.variants_inventory[{{- variant.id -}}] = {{ variant.inventory_quantity | json }};
+        {%- endfor -%}
+    </script>
+
+    {% form 'product', product, id: 'product-form' %}
+        <div style="width: 400px">
+            {%- for product_option in product.options_with_values -%}
+                <fieldset>
+                    <legend>{{ product_option.name }}</legend>
+
+                    {%- for value in product_option.values -%}
+                        <label style="background-color: {{ value }}">
+                            <input
+                                    type="radio"
+                                    name="options[{{- product_option.name | escape -}}]"
+                                    value="{{ value | escape }}"
+                                    {% if product_option.selected_value == value -%}
+                                        checked
+                                    {%- endif -%}
+                            >
+                            {{ value }}
+                        </label>
+                    {%- endfor -%}
+                </fieldset>
+            {%- endfor -%}
+        </div>
+
+        {% comment %}<select name="id" id="product-variants">
+            {%- for variant in product.variants -%}
+                <option
+                        value="{{ variant.id }}"
+                        {%- if product.selected_or_first_available_variant.id == variant.id -%}selected{%- endif -%}
+                >
+                    {{ variant.title }}
+                </option>
+            {%- endfor -%}
+        </select>{% endcomment %}
+
+        <input type="number" name="quantity" min="1" max="" value="1">
+        <input type="hidden" name="sections" value="alternate-header,alternate-main-product">
+        <input type="hidden" name="sections_url" value="{{ routes.root_url }}">
+        <input type="submit" id="ATC-btn" value="Add to Cart" data-out-of-stock="Out of stock" data-atc="Add to Cart"
+               data-unavailable="Unavailable">
+    {% endform %}
+
+
+    <script>
+        const form = document.getElementById('product-form');
+        const btn = document.getElementById('ATC-btn');
+        /*form.addEventListener('submit', event => {
+            event.preventDefault()
+            fetch(event.target.action + '.js', {
+                method: event.target.method,
+                body: new FormData(event.target),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(response => response.json())
+                .then(response => {
+                    console.log(response)
+                    const event = new CustomEvent('cart:added', {
+                        detail: {
+                            header: response.sections['alternate-header']
+                        },
+                        bubbles: true
+                    })
+
+                    form.dispatchEvent(event)
+
+                })
+                .catch(console.error)
+        })*/
+
+        /* new window.Shopify.OptionSelectors('product-variants', {
+             product: {{ product | json }},
+            onVariantSelected: (variant) => {
+                console.log('Selected variant:', variant)
+                if (!variant) {
+                    //unavailable
+                    btn.setAttribute('disabled', 'disabled')
+                    btn.value = btn.dataset.unavailable
+                } else if (variant && variant.available) {
+                    // ATC
+                    btn.removeAttribute('disabled')
+                    btn.value = btn.dataset.atc
+                } else if (variant && !variant.available) {
+                    //Out of stock
+                    btn.setAttribute('disabled', 'disabled')
+                    btn.value = btn.dataset.outOfStock
+                }
+            },
+            enableHistoryState: true
+        })*/
+    </script>
+
+    {%- if section.blocks.size > 0 -%}
+        <ul>
+            {%- for block in section.blocks -%}
+                <li id="{{ block.id }}" {{- block.shopify_attributes -}}>
+                    {{ block.settings.test }}
+                </li>
+            {%- endfor -%}
+        </ul>
+    {%- endif -%}
+
+    <custom-element>
+        <h3>Custom Element</h3>
+    </custom-element>
+
+</div>
+{% schema %}
+{
+  "name": "Alternate Product",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Limit",
+      "step": 1,
+      "min": 1,
+      "max": 100,
+      "default": 10
+    }
+  ],
+  "blocks": [
+    {
+      "type": "block",
+      "name": "Block",
+      "settings": [
+        {
+          "type": "text",
+          "id": "test",
+          "label": "Test"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Alternate Product",
+      "settings": {}
+    }
+  ]
+}
+{% endschema %}

@@ -216,7 +216,7 @@
       }
     {% endstyle %}
 
-    {{ 'base.css' | asset_url | stylesheet_tag }}
+    {{ 'base.min.css' | asset_url | stylesheet_tag }}
 
     {%- unless settings.type_body_font.system? -%}
       <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
@@ -226,19 +226,25 @@
     {%- endunless -%}
 
     {%- if settings.predictive_search_enabled -%}
-      <link rel="stylesheet" href="{{ 'component-predictive-search.css' | asset_url }}" media="print" onload="this.media='all'">
+      <link
+        rel="stylesheet"
+        href="{{ 'component-predictive-search.css' | asset_url }}"
+        media="print"
+        onload="this.media='all'"
+      >
     {%- endif -%}
 
-    <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
-    if (Shopify.designMode) {
-      document.documentElement.classList.add('shopify-design-mode');
-    }
+    <script>
+      document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+      if (Shopify.designMode) {
+        document.documentElement.classList.add('shopify-design-mode');
+      }
     </script>
   </head>
 
   <body class="gradient">
     <a class="skip-to-content-link button visually-hidden" href="#MainContent">
-      {{ "accessibility.skip_to_text" | t }}
+      {{ 'accessibility.skip_to_text' | t }}
     </a>
 
     {%- if settings.cart_type == 'drawer' -%}
@@ -259,6 +265,9 @@
     </ul>
 
     <script>
+      
+      
+      
       window.shopUrl = '{{ request.origin }}';
       window.routes = {
         cart_add_url: '{{ routes.cart_add_url }}',
@@ -277,7 +286,6 @@
         addToCart: `{{ 'products.product.add_to_cart' | t }}`,
         soldOut: `{{ 'products.product.sold_out' | t }}`,
         unavailable: `{{ 'products.product.unavailable' | t }}`,
-        unavailable_with_option: `{{ 'products.product.value_unavailable' | t: option_value: '[value]' }}`,
       }
 
       window.accessibilityStrings = {
@@ -286,6 +294,9 @@
         pauseSlideshow: `{{ 'sections.slideshow.pause_slideshow' | t }}`,
         playSlideshow: `{{ 'sections.slideshow.play_slideshow' | t }}`,
       }
+
+
+
     </script>
 
     {%- if settings.predictive_search_enabled -%}
