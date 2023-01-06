@@ -3,7 +3,10 @@
   "sections": {
     "main": {
       "type": "alternate-main-product",
-      "settings": {}
+      "settings": {
+        "background": "rgba(0,0,0,0)",
+        "limit": 10
+      }
     }
   },
   "order": [
